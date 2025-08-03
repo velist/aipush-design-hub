@@ -44,8 +44,8 @@ const Features = () => {
   return (
     <section id="features" className="py-20 relative">
       {/* Background Elements */}
-      <div className="absolute top-10 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-10 right-10 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '3s' }}></div>
+      <div className="absolute top-10 left-10 w-48 h-48 bg-blue-100/30 rounded-full blur-2xl animate-float"></div>
+      <div className="absolute bottom-10 right-10 w-64 h-64 bg-purple-100/30 rounded-full blur-2xl animate-float" style={{ animationDelay: '3s' }}></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -67,7 +67,7 @@ const Features = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group glass-card p-8 rounded-2xl hover-lift transition-all duration-500"
+              className="group bg-white/80 backdrop-blur-sm border border-white/60 p-8 rounded-2xl hover-lift transition-all duration-500 shadow-sm"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Icon */}
@@ -78,16 +78,16 @@ const Features = () => {
               </div>
 
               {/* Content */}
-              <h3 className="text-xl font-semibold mb-4 group-hover:text-primary transition-colors">
+              <h3 className="text-xl font-semibold mb-4 group-hover:text-blue-600 transition-colors">
                 {feature.title}
               </h3>
-              <p className="text-foreground/70 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed">
                 {feature.description}
               </p>
 
               {/* Hover Effect */}
               <div className="mt-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                <div className="w-full h-1 bg-gradient-to-r from-primary/50 to-accent/50 rounded-full"></div>
+                <div className="w-full h-1 bg-gradient-to-r from-blue-400/50 to-purple-400/50 rounded-full"></div>
               </div>
             </div>
           ))}
@@ -95,23 +95,23 @@ const Features = () => {
 
         {/* Call to Action */}
         <div className="mt-20 text-center">
-          <div className="glass-card p-12 rounded-3xl max-w-4xl mx-auto">
+          <div className="bg-white/70 backdrop-blur-sm border border-white/60 p-12 rounded-3xl max-w-4xl mx-auto shadow-sm">
             <div className="flex justify-center mb-6">
-              <div className="p-4 bg-gradient-to-r from-primary to-accent rounded-2xl">
+              <div className="p-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl">
                 <Sparkles className="h-12 w-12 text-white animate-bounce-gentle" />
               </div>
             </div>
             <h3 className="text-3xl font-bold text-gradient mb-6">
               准备好体验AI的强大力量了吗？
             </h3>
-            <p className="text-lg text-foreground/70 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
               加入我们的AI工具生态，让智能技术为您的工作和生活带来全新的可能性。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-gradient-to-r from-primary to-accent text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+              <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
                 立即开始使用
               </button>
-              <button className="px-8 py-4 glass-button font-semibold rounded-xl">
+              <button className="px-8 py-4 bg-white/60 border border-white/60 backdrop-blur-sm font-semibold rounded-xl hover:bg-white/80 transition-all">
                 联系我们
               </button>
             </div>

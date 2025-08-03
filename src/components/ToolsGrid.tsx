@@ -116,8 +116,8 @@ const ToolsGrid = () => {
           {tools.map((tool, index) => (
             <div
               key={tool.id}
-              className={`group glass-card p-6 rounded-2xl hover-lift transition-all duration-500 ${
-                tool.featured ? 'ring-2 ring-primary/20' : ''
+              className={`group bg-white/80 backdrop-blur-sm border border-white/60 p-6 rounded-2xl hover-lift transition-all duration-500 shadow-sm ${
+                tool.featured ? 'ring-2 ring-blue-200/50' : ''
               }`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
@@ -128,11 +128,11 @@ const ToolsGrid = () => {
                     <img src={tool.icon} alt={tool.name} className="w-8 h-8" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
                       {tool.name}
                     </h3>
                     <div className="flex items-center space-x-2 mt-1">
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700">
                         {tool.category}
                       </Badge>
                       {tool.featured && (
@@ -145,13 +145,13 @@ const ToolsGrid = () => {
               </div>
 
               {/* Tool Description */}
-              <p className="text-foreground/70 mb-6 leading-relaxed">
+              <p className="text-gray-600 mb-6 leading-relaxed">
                 {tool.description}
               </p>
 
               {/* Tool Stats */}
               <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-4 text-sm text-foreground/60">
+                <div className="flex items-center space-x-4 text-sm text-gray-500">
                   <div className="flex items-center space-x-1">
                     <Users className="h-4 w-4" />
                     <span>{tool.users}</span>
@@ -168,7 +168,7 @@ const ToolsGrid = () => {
                 {tool.status === '已上线' ? (
                   <Button
                     asChild
-                    className="flex-1 accent-gradient text-white group/btn"
+                    className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white group/btn border-0 shadow-lg"
                   >
                     <a href={tool.url} target="_blank" rel="noopener noreferrer">
                       立即使用
@@ -178,13 +178,13 @@ const ToolsGrid = () => {
                 ) : (
                   <Button
                     variant="outline"
-                    className="flex-1 glass-button"
+                    className="flex-1 bg-white/60 border-gray-200 hover:bg-white/80"
                     disabled
                   >
                     {tool.status === '开发中' ? '敬请期待' : '即将推出'}
                   </Button>
                 )}
-                <Button variant="ghost" size="sm" className="glass-button">
+                <Button variant="ghost" size="sm" className="bg-white/40 hover:bg-white/60">
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
@@ -194,12 +194,12 @@ const ToolsGrid = () => {
 
         {/* Coming Soon Banner */}
         <div className="mt-16 text-center">
-          <div className="glass-card p-8 rounded-2xl inline-block">
+          <div className="bg-white/70 backdrop-blur-sm border border-white/60 p-8 rounded-2xl inline-block shadow-sm">
             <h3 className="text-2xl font-bold text-gradient mb-4">更多工具即将推出</h3>
-            <p className="text-foreground/70 mb-6">
+            <p className="text-gray-600 mb-6">
               我们正在开发更多创新的AI工具，敬请期待！
             </p>
-            <Button className="accent-gradient text-white">
+            <Button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 shadow-lg">
               订阅更新通知
             </Button>
           </div>

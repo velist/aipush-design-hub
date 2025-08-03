@@ -23,7 +23,7 @@ const Navigation = () => {
 
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      scrolled ? 'glass-card' : 'bg-transparent'
+      scrolled ? 'bg-white/80 backdrop-blur-sm border-b border-white/40 shadow-sm' : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -42,13 +42,13 @@ const Navigation = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-foreground/80 hover:text-primary transition-colors duration-200 font-medium relative group"
+                className="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium relative group"
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
-            <Button className="glass-button">
+            <Button className="bg-white/60 border-white/60 backdrop-blur-sm hover:bg-white/80">
               开始使用
             </Button>
           </div>
@@ -59,7 +59,7 @@ const Navigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(!isOpen)}
-              className="glass-button"
+              className="bg-white/40 hover:bg-white/60"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
@@ -81,7 +81,7 @@ const Navigation = () => {
                 </a>
               ))}
               <div className="px-3 py-2">
-                <Button className="w-full glass-button">
+                <Button className="w-full bg-white/60 border-white/60 backdrop-blur-sm hover:bg-white/80">
                   开始使用
                 </Button>
               </div>
