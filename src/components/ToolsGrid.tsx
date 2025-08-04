@@ -1,12 +1,12 @@
 import { ExternalLink, ArrowRight, Star, Users, TrendingUp } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import newsIcon from '@/assets/news-icon.png';
-import chatIcon from '@/assets/chat-icon.png';
-import imageIcon from '@/assets/image-icon.png';
-import writingIcon from '@/assets/writing-icon.png';
-import codeIcon from '@/assets/code-icon.png';
-import analyticsIcon from '@/assets/analytics-icon.png';
+import newsIcon from '@/assets/news-icon-new.png';
+import chatIcon from '@/assets/chat-icon-new.png';
+import imageIcon from '@/assets/image-icon-new.png';
+import writingIcon from '@/assets/writing-icon-new.png';
+import codeIcon from '@/assets/code-icon-new.png';
+import analyticsIcon from '@/assets/analytics-icon-new.png';
 
 const ToolsGrid = () => {
   const tools = [
