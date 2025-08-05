@@ -9,6 +9,7 @@ import codeIcon from '@/assets/code-icon-new.png';
 import analyticsIcon from '@/assets/analytics-icon-new.png';
 
 const ToolsGrid = () => {
+  console.log('ToolsGrid component loaded - new version');
 
   // 本站工具
   const myTools = [
