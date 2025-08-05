@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Sitemap
 Sitemap: https://velist.github.io/aipush-design-hub/sitemap.xml
+
+# AI工具站 - aipush.fun
+# 探索人工智能的无限可能
