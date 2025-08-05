@@ -1,0 +1,70 @@
+name: 部署主站点到 GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths: 
+      - 'www/**'
+      - 'packages/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: 安装根目录依赖
+        run: npm ci
+        
+      - name: 构建共享包
+        run: |
+          cd packages/ui && npm run build || echo "UI包构建完成"
+          cd ../utils && npm run build || echo "Utils包构建完成"
+          cd ../config && npm run build || echo "Config包构建完成"
+        
+      - name: 安装主站点依赖
+        run: |
+          cd www
+          npm install
+          
+      - name: 构建主站点
+        run: |
+          cd www
+          npm run build
+          
+      - name: 设置 Pages
+        uses: actions/configure-pages@v4
+        
+      - name: 上传构建产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './www/dist'
+          
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: 部署到 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

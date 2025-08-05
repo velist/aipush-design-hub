@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://velist.github.io/aipush-design-hub/sitemap.xml

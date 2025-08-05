@@ -1,0 +1,45 @@
+{
+  "name": "aipush-design-hub",
+  "version": "1.0.0",
+  "description": "AI工具站 - 集成多种AI工具的统一平台",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "www"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "dev:www": "cd www && npm run dev",
+    "dev:news": "cd apps/ai-news && npm run dev",
+    "build:all": "turbo run build",
+    "preview": "turbo run preview"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "turbo": "^1.12.4",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/velist/aipush-design-hub.git"
+  },
+  "keywords": [
+    "ai-tools",
+    "react",
+    "typescript",
+    "monorepo",
+    "ai-news",
+    "ai-assistant"
+  ],
+  "author": "velist",
+  "license": "MIT"
+}
