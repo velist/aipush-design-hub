@@ -1,4 +1,5 @@
-import { ExternalLink, ArrowRight, Star, Users, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { ExternalLink, ArrowRight, Star, Users, TrendingUp, Home, Globe } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import newsIcon from '@/assets/news-icon-new.png';
@@ -9,7 +10,10 @@ import codeIcon from '@/assets/code-icon-new.png';
 import analyticsIcon from '@/assets/analytics-icon-new.png';
 
 const ToolsGrid = () => {
-  const tools = [
+  const [activeTab, setActiveTab] = useState('本站工具');
+
+  const allTools = [
+    // 本站工具
     {
       id: 1,
       name: 'AI新闻推送',
@@ -21,6 +25,7 @@ const ToolsGrid = () => {
       category: '资讯',
       featured: true,
       color: 'from-blue-500 to-cyan-500',
+      type: '本站工具',
     },
     {
       id: 2,
@@ -33,6 +38,7 @@ const ToolsGrid = () => {
       category: '对话',
       featured: true,
       color: 'from-purple-500 to-pink-500',
+      type: '本站工具',
     },
     {
       id: 3,
@@ -45,6 +51,7 @@ const ToolsGrid = () => {
       category: '创意',
       featured: false,
       color: 'from-green-500 to-emerald-500',
+      type: '本站工具',
     },
     {
       id: 4,
@@ -57,6 +64,7 @@ const ToolsGrid = () => {
       category: '写作',
       featured: false,
       color: 'from-orange-500 to-red-500',
+      type: '本站工具',
     },
     {
       id: 5,
@@ -69,6 +77,7 @@ const ToolsGrid = () => {
       category: '开发',
       featured: false,
       color: 'from-indigo-500 to-blue-500',
+      type: '本站工具',
     },
     {
       id: 6,
@@ -81,8 +90,69 @@ const ToolsGrid = () => {
       category: '分析',
       featured: false,
       color: 'from-teal-500 to-cyan-500',
+      type: '本站工具',
+    },
+    // 站外工具
+    {
+      id: 7,
+      name: 'ChatGPT',
+      description: 'OpenAI推出的强大对话AI，支持文本生成、问答、创意写作等多种功能',
+      icon: chatIcon,
+      url: 'https://chat.openai.com',
+      status: '已上线',
+      users: '100M+',
+      category: '对话',
+      featured: true,
+      color: 'from-green-500 to-emerald-500',
+      type: '站外工具',
+    },
+    {
+      id: 8,
+      name: 'Midjourney',
+      description: '顶级AI图像生成工具，创造令人惊叹的艺术作品和视觉内容',
+      icon: imageIcon,
+      url: 'https://midjourney.com',
+      status: '已上线',
+      users: '15M+',
+      category: '创意',
+      featured: true,
+      color: 'from-purple-500 to-pink-500',
+      type: '站外工具',
+    },
+    {
+      id: 9,
+      name: 'GitHub Copilot',
+      description: 'AI编程助手，智能代码补全和生成，提升开发效率',
+      icon: codeIcon,
+      url: 'https://github.com/features/copilot',
+      status: '已上线',
+      users: '1M+',
+      category: '开发',
+      featured: false,
+      color: 'from-gray-600 to-gray-700',
+      type: '站外工具',
+    },
+    {
+      id: 10,
+      name: 'Notion AI',
+      description: '集成在Notion中的AI写作助手，帮助整理思路和内容创作',
+      icon: writingIcon,
+      url: 'https://notion.so/product/ai',
+      status: '已上线',
+      users: '30M+',
+      category: '写作',
+      featured: false,
+      color: 'from-slate-500 to-slate-600',
+      type: '站外工具',
     },
   ];
+
+  const tabs = [
+    { id: '本站工具', name: '本站工具', icon: Home },
+    { id: '站外工具', name: '站外工具', icon: Globe },
+  ];
+
+  const tools = allTools.filter(tool => tool.type === activeTab);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -109,6 +179,31 @@ const ToolsGrid = () => {
           <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
             从新闻资讯到创意生成，从代码开发到数据分析，我们为您提供全方位的AI工具支持
           </p>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex justify-center mb-12">
+          <div className="bg-white/70 backdrop-blur-sm border border-white/60 p-2 rounded-2xl shadow-sm">
+            <div className="flex space-x-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                      activeTab === tab.id
+                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
+                        : 'text-gray-600 hover:text-blue-600 hover:bg-white/60'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* Tools Grid */}
