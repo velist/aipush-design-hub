@@ -17,6 +17,12 @@ out/
 .env.development.local
 .env.test.local
 .env.production.local
+*.env
+
+# GitHub keys and sensitive files
+githubkey.env
+*.key
+*.pem
 
 # Logs
 npm-debug.log*
@@ -111,3 +117,6 @@ Thumbs.db
 *.backup
 *.old
 .env.backup
+
+# Feedback images
+*反馈/
