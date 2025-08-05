@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test React Loading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>React Loading Test</h1>
+        <div id="test-status" class="loading">检查中...</div>
+        <div id="root-check"></div>
+        <div id="js-check"></div>
+        <div id="console-errors"></div>
+    </div>
+
+    <script>
+        // 检查 root 元素
+        const rootEl = document.getElementById('root');
+        if (rootEl) {
+            document.getElementById('root-check').innerHTML = '<span class="success">✓ Root element found</span>';
+        } else {
+            document.getElementById('root-check').innerHTML = '<span class="error">✗ Root element not found</span>';
+        }
+
+        // 检查是否能加载外部JS
+        const jsTest = document.createElement('script');
+        jsTest.src = '/assets/index-D-2p25Ct.js';
+        jsTest.type = 'module';
+        jsTest.onload = function() {
+            document.getElementById('js-check').innerHTML = '<span class="success">✓ JavaScript module loaded</span>';
+            setTimeout(() => {
+                if (rootEl && rootEl.children.length === 0) {
+                    document.getElementById('test-status').innerHTML = '<span class="error">React没有渲染任何内容到root元素</span>';
+                } else if (rootEl && rootEl.children.length > 0) {
+                    document.getElementById('test-status').innerHTML = '<span class="success">React成功渲染!</span>';
+                }
+            }, 2000);
+        };
+        jsTest.onerror = function() {
+            document.getElementById('js-check').innerHTML = '<span class="error">✗ JavaScript module failed to load</span>';
+        };
+
+        // 捕获控制台错误
+        const originalError = console.error;
+        const errors = [];
+        console.error = function(...args) {
+            errors.push(args.join(' '));
+            originalError.apply(console, args);
+        };
+
+        setTimeout(() => {
+            if (errors.length > 0) {
+                document.getElementById('console-errors').innerHTML = '<div class="error">Console Errors:<br>' + errors.join('<br>') + '</div>';
+            } else {
+                document.getElementById('console-errors').innerHTML = '<span class="success">✓ No console errors</span>';
+            }
+        }, 3000);
+
+        document.head.appendChild(jsTest);
+    </script>
+
+    <div id="root"></div>
+</body>
+</html>
