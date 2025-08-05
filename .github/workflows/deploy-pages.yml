@@ -13,6 +13,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 concurrency:
   group: "pages"
@@ -32,13 +33,7 @@ jobs:
           cache: 'npm'
           
       - name: 安装根目录依赖
-        run: npm ci
-        
-      - name: 构建共享包
-        run: |
-          cd packages/ui && npm run build || echo "UI包构建完成"
-          cd ../utils && npm run build || echo "Utils包构建完成"
-          cd ../config && npm run build || echo "Config包构建完成"
+        run: npm install
         
       - name: 安装主站点依赖
         run: |
