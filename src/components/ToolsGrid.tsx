@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { ExternalLink, ArrowRight, Star, Users, TrendingUp, Home, Globe } from 'lucide-react';
+import { ExternalLink, ArrowRight, Star, Users, TrendingUp, MessageCircle, Palette, Mic, Video, Briefcase, Code, BarChart3, FileText } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import newsIcon from '@/assets/news-icon-new.png';
@@ -10,10 +9,9 @@ import codeIcon from '@/assets/code-icon-new.png';
 import analyticsIcon from '@/assets/analytics-icon-new.png';
 
 const ToolsGrid = () => {
-  const [activeTab, setActiveTab] = useState('本站工具');
 
-  const allTools = [
-    // 本站工具
+  // 本站工具
+  const myTools = [
     {
       id: 1,
       name: 'AI新闻推送',
@@ -25,7 +23,6 @@ const ToolsGrid = () => {
       category: '资讯',
       featured: true,
       color: 'from-blue-500 to-cyan-500',
-      type: '本站工具',
     },
     {
       id: 2,
@@ -38,7 +35,6 @@ const ToolsGrid = () => {
       category: '对话',
       featured: true,
       color: 'from-purple-500 to-pink-500',
-      type: '本站工具',
     },
     {
       id: 3,
@@ -48,10 +44,9 @@ const ToolsGrid = () => {
       url: '#',
       status: '开发中',
       users: '即将推出',
-      category: '创意',
+      category: '绘画',
       featured: false,
       color: 'from-green-500 to-emerald-500',
-      type: '本站工具',
     },
     {
       id: 4,
@@ -61,10 +56,9 @@ const ToolsGrid = () => {
       url: '#',
       status: '规划中',
       users: '敬请期待',
-      category: '写作',
+      category: '办公',
       featured: false,
       color: 'from-orange-500 to-red-500',
-      type: '本站工具',
     },
     {
       id: 5,
@@ -77,7 +71,6 @@ const ToolsGrid = () => {
       category: '开发',
       featured: false,
       color: 'from-indigo-500 to-blue-500',
-      type: '本站工具',
     },
     {
       id: 6,
@@ -87,72 +80,211 @@ const ToolsGrid = () => {
       url: '#',
       status: '规划中',
       users: '敬请期待',
-      category: '分析',
+      category: '办公',
       featured: false,
       color: 'from-teal-500 to-cyan-500',
-      type: '本站工具',
-    },
-    // 站外工具
-    {
-      id: 7,
-      name: 'ChatGPT',
-      description: 'OpenAI推出的强大对话AI，支持文本生成、问答、创意写作等多种功能',
-      icon: chatIcon,
-      url: 'https://chat.openai.com',
-      status: '已上线',
-      users: '100M+',
-      category: '对话',
-      featured: true,
-      color: 'from-green-500 to-emerald-500',
-      type: '站外工具',
-    },
-    {
-      id: 8,
-      name: 'Midjourney',
-      description: '顶级AI图像生成工具，创造令人惊叹的艺术作品和视觉内容',
-      icon: imageIcon,
-      url: 'https://midjourney.com',
-      status: '已上线',
-      users: '15M+',
-      category: '创意',
-      featured: true,
-      color: 'from-purple-500 to-pink-500',
-      type: '站外工具',
-    },
-    {
-      id: 9,
-      name: 'GitHub Copilot',
-      description: 'AI编程助手，智能代码补全和生成，提升开发效率',
-      icon: codeIcon,
-      url: 'https://github.com/features/copilot',
-      status: '已上线',
-      users: '1M+',
-      category: '开发',
-      featured: false,
-      color: 'from-gray-600 to-gray-700',
-      type: '站外工具',
-    },
-    {
-      id: 10,
-      name: 'Notion AI',
-      description: '集成在Notion中的AI写作助手，帮助整理思路和内容创作',
-      icon: writingIcon,
-      url: 'https://notion.so/product/ai',
-      status: '已上线',
-      users: '30M+',
-      category: '写作',
-      featured: false,
-      color: 'from-slate-500 to-slate-600',
-      type: '站外工具',
     },
   ];
 
-  const tabs = [
-    { id: '本站工具', name: '本站工具', icon: Home },
-    { id: '站外工具', name: '站外工具', icon: Globe },
+  // 站外工具分类
+  const externalToolCategories = [
+    {
+      name: '对话',
+      icon: MessageCircle,
+      tools: [
+        {
+          id: 7,
+          name: 'ChatGPT',
+          description: 'OpenAI推出的强大对话AI，支持文本生成、问答、创意写作等多种功能',
+          icon: chatIcon,
+          url: 'https://chat.openai.com',
+          status: '已上线',
+          users: '100M+',
+          featured: true,
+        },
+        {
+          id: 8,
+          name: 'Claude',
+          description: 'Anthropic开发的AI助手，擅长分析推理和安全对话',
+          icon: chatIcon,
+          url: 'https://claude.ai',
+          status: '已上线',
+          users: '10M+',
+          featured: false,
+        },
+        {
+          id: 9,
+          name: 'Gemini',
+          description: 'Google推出的多模态AI，支持文本、图像、代码等多种任务',
+          icon: chatIcon,
+          url: 'https://gemini.google.com',
+          status: '已上线',
+          users: '50M+',
+          featured: false,
+        },
+      ]
+    },
+    {
+      name: '绘画',
+      icon: Palette,
+      tools: [
+        {
+          id: 10,
+          name: 'Midjourney',
+          description: '顶级AI图像生成工具，创造令人惊叹的艺术作品和视觉内容',
+          icon: imageIcon,
+          url: 'https://midjourney.com',
+          status: '已上线',
+          users: '15M+',
+          featured: true,
+        },
+        {
+          id: 11,
+          name: 'DALL-E 3',
+          description: 'OpenAI的图像生成模型，支持自然语言描述生成高质量图像',
+          icon: imageIcon,
+          url: 'https://openai.com/dall-e-3',
+          status: '已上线',
+          users: '5M+',
+          featured: false,
+        },
+        {
+          id: 12,
+          name: 'Stable Diffusion',
+          description: '开源的图像生成模型，支持多种风格和自定义训练',
+          icon: imageIcon,
+          url: 'https://stability.ai',
+          status: '已上线',
+          users: '20M+',
+          featured: false,
+        },
+      ]
+    },
+    {
+      name: '视频',
+      icon: Video,
+      tools: [
+        {
+          id: 13,
+          name: 'Runway',
+          description: 'AI视频生成和编辑平台，支持文本生成视频、视频风格转换等',
+          icon: imageIcon,
+          url: 'https://runway.com',
+          status: '已上线',
+          users: '2M+',
+          featured: true,
+        },
+        {
+          id: 14,
+          name: 'Pika Labs',
+          description: 'AI视频生成工具，支持文本和图像生成短视频',
+          icon: imageIcon,
+          url: 'https://pika.art',
+          status: '已上线',
+          users: '1M+',
+          featured: false,
+        },
+      ]
+    },
+    {
+      name: '语音',
+      icon: Mic,
+      tools: [
+        {
+          id: 15,
+          name: 'ElevenLabs',
+          description: 'AI语音合成和克隆工具，支持多种语言和声音风格',
+          icon: chatIcon,
+          url: 'https://elevenlabs.io',
+          status: '已上线',
+          users: '3M+',
+          featured: true,
+        },
+        {
+          id: 16,
+          name: 'Murf',
+          description: 'AI配音工具，支持多种语音风格和语言的专业配音',
+          icon: chatIcon,
+          url: 'https://murf.ai',
+          status: '已上线',
+          users: '1M+',
+          featured: false,
+        },
+      ]
+    },
+    {
+      name: '办公',
+      icon: Briefcase,
+      tools: [
+        {
+          id: 17,
+          name: 'Notion AI',
+          description: '集成在Notion中的AI写作助手，帮助整理思路和内容创作',
+          icon: writingIcon,
+          url: 'https://notion.so/product/ai',
+          status: '已上线',
+          users: '30M+',
+          featured: true,
+        },
+        {
+          id: 18,
+          name: 'Jasper',
+          description: 'AI写作助手，专注于营销文案和内容创作',
+          icon: writingIcon,
+          url: 'https://jasper.ai',
+          status: '已上线',
+          users: '100K+',
+          featured: false,
+        },
+        {
+          id: 19,
+          name: 'Copy.ai',
+          description: 'AI文案生成工具，支持多种营销文案和创意写作',
+          icon: writingIcon,
+          url: 'https://copy.ai',
+          status: '已上线',
+          users: '10M+',
+          featured: false,
+        },
+      ]
+    },
+    {
+      name: '开发',
+      icon: Code,
+      tools: [
+        {
+          id: 20,
+          name: 'GitHub Copilot',
+          description: 'AI编程助手，智能代码补全和生成，提升开发效率',
+          icon: codeIcon,
+          url: 'https://github.com/features/copilot',
+          status: '已上线',
+          users: '1M+',
+          featured: true,
+        },
+        {
+          id: 21,
+          name: 'Cursor',
+          description: 'AI代码编辑器，集成强大的AI编程助手功能',
+          icon: codeIcon,
+          url: 'https://cursor.sh',
+          status: '已上线',
+          users: '500K+',
+          featured: false,
+        },
+        {
+          id: 22,
+          name: 'Replit',
+          description: '在线编程平台，集成AI代码生成和调试功能',
+          icon: codeIcon,
+          url: 'https://replit.com',
+          status: '已上线',
+          users: '20M+',
+          featured: false,
+        },
+      ]
+    },
   ];
-
-  const tools = allTools.filter(tool => tool.type === activeTab);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -162,6 +294,86 @@ const ToolsGrid = () => {
       default: return 'bg-gray-500';
     }
   };
+
+  const ToolCard = ({ tool, index, isExternal = false }: { tool: any, index: number, isExternal?: boolean }) => (
+    <div
+      key={tool.id}
+      className={`group bg-white/80 backdrop-blur-sm border border-white/60 p-6 rounded-2xl hover-lift transition-all duration-500 shadow-sm ${
+        tool.featured ? 'ring-2 ring-blue-200/50' : ''
+      }`}
+      style={{ animationDelay: `${index * 0.1}s` }}
+    >
+      {/* Tool Header */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <div className={`p-3 rounded-xl ${isExternal ? 'bg-gradient-to-r from-gray-500 to-gray-600' : `bg-gradient-to-r ${tool.color}`} shimmer-effect`}>
+            <img src={tool.icon} alt={tool.name} className="w-8 h-8" />
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+              {tool.name}
+            </h3>
+            <div className="flex items-center space-x-2 mt-1">
+              {tool.featured && (
+                <Star className="h-3 w-3 text-yellow-400 fill-current" />
+              )}
+              {isExternal && (
+                <Badge variant="secondary" className="text-xs bg-green-50 text-green-700">
+                  外部工具
+                </Badge>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className={`w-2 h-2 rounded-full ${getStatusColor(tool.status)}`}></div>
+      </div>
+
+      {/* Tool Description */}
+      <p className="text-gray-600 mb-6 leading-relaxed">
+        {tool.description}
+      </p>
+
+      {/* Tool Stats */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-4 text-sm text-gray-500">
+          <div className="flex items-center space-x-1">
+            <Users className="h-4 w-4" />
+            <span>{tool.users}</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <TrendingUp className="h-4 w-4" />
+            <span>{tool.status}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Tool Actions */}
+      <div className="flex space-x-2">
+        {tool.status === '已上线' ? (
+          <Button
+            asChild
+            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white group/btn border-0 shadow-lg"
+          >
+            <a href={tool.url} target="_blank" rel="noopener noreferrer">
+              立即使用
+              <ExternalLink className="ml-2 h-4 w-4 group-hover/btn:rotate-12 transition-transform" />
+            </a>
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            className="flex-1 bg-white/60 border-gray-200 hover:bg-white/80"
+            disabled
+          >
+            {tool.status === '开发中' ? '敬请期待' : '即将推出'}
+          </Button>
+        )}
+        <Button variant="ghost" size="sm" className="bg-white/40 hover:bg-white/60">
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  );
 
   return (
     <section id="tools" className="py-20 relative">
@@ -181,110 +393,63 @@ const ToolsGrid = () => {
           </p>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-white/70 backdrop-blur-sm border border-white/60 p-2 rounded-2xl shadow-sm">
-            <div className="flex space-x-2">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
-                      activeTab === tab.id
-                        ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg'
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-white/60'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{tab.name}</span>
-                  </button>
-                );
-              })}
+        {/* 本站工具 */}
+        <div className="mb-20">
+          <div className="flex items-center justify-center mb-12">
+            <div className="bg-white/70 backdrop-blur-sm border border-white/60 p-4 rounded-2xl shadow-sm">
+              <h3 className="text-2xl font-bold text-center text-gradient flex items-center justify-center space-x-2">
+                <Badge className="bg-blue-500 text-white">本站工具</Badge>
+                <span>AI Push 工具集</span>
+              </h3>
             </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {myTools.map((tool, index) => (
+              <ToolCard key={tool.id} tool={tool} index={index} />
+            ))}
           </div>
         </div>
 
-        {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tools.map((tool, index) => (
-            <div
-              key={tool.id}
-              className={`group bg-white/80 backdrop-blur-sm border border-white/60 p-6 rounded-2xl hover-lift transition-all duration-500 shadow-sm ${
-                tool.featured ? 'ring-2 ring-blue-200/50' : ''
-              }`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Tool Header */}
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className={`p-3 rounded-xl bg-gradient-to-r ${tool.color} shimmer-effect`}>
-                    <img src={tool.icon} alt={tool.name} className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
-                      {tool.name}
-                    </h3>
-                    <div className="flex items-center space-x-2 mt-1">
-                      <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700">
-                        {tool.category}
-                      </Badge>
-                      {tool.featured && (
-                        <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                      )}
+        {/* 站外工具 */}
+        <div>
+          <div className="flex items-center justify-center mb-12">
+            <div className="bg-white/70 backdrop-blur-sm border border-white/60 p-4 rounded-2xl shadow-sm">
+              <h3 className="text-2xl font-bold text-center text-gradient flex items-center justify-center space-x-2">
+                <Badge className="bg-gray-500 text-white">站外工具</Badge>
+                <span>精选AI工具推荐</span>
+              </h3>
+            </div>
+          </div>
+
+          {externalToolCategories.map((category, categoryIndex) => {
+            const CategoryIcon = category.icon;
+            return (
+              <div key={category.name} className="mb-16">
+                {/* 分类标题 */}
+                <div className="flex items-center justify-center mb-8">
+                  <div className="bg-white/60 backdrop-blur-sm border border-white/40 p-3 rounded-xl shadow-sm">
+                    <div className="flex items-center space-x-3">
+                      <CategoryIcon className="h-6 w-6 text-blue-600" />
+                      <h4 className="text-xl font-bold text-gray-800">{category.name}</h4>
                     </div>
                   </div>
                 </div>
-                <div className={`w-2 h-2 rounded-full ${getStatusColor(tool.status)}`}></div>
-              </div>
-
-              {/* Tool Description */}
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                {tool.description}
-              </p>
-
-              {/* Tool Stats */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-4 text-sm text-gray-500">
-                  <div className="flex items-center space-x-1">
-                    <Users className="h-4 w-4" />
-                    <span>{tool.users}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <TrendingUp className="h-4 w-4" />
-                    <span>{tool.status}</span>
-                  </div>
+                
+                {/* 工具网格 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {category.tools.map((tool, toolIndex) => (
+                    <ToolCard 
+                      key={tool.id} 
+                      tool={tool} 
+                      index={categoryIndex * 3 + toolIndex} 
+                      isExternal={true}
+                    />
+                  ))}
                 </div>
               </div>
-
-              {/* Tool Actions */}
-              <div className="flex space-x-2">
-                {tool.status === '已上线' ? (
-                  <Button
-                    asChild
-                    className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white group/btn border-0 shadow-lg"
-                  >
-                    <a href={tool.url} target="_blank" rel="noopener noreferrer">
-                      立即使用
-                      <ExternalLink className="ml-2 h-4 w-4 group-hover/btn:rotate-12 transition-transform" />
-                    </a>
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    className="flex-1 bg-white/60 border-gray-200 hover:bg-white/80"
-                    disabled
-                  >
-                    {tool.status === '开发中' ? '敬请期待' : '即将推出'}
-                  </Button>
-                )}
-                <Button variant="ghost" size="sm" className="bg-white/40 hover:bg-white/60">
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Coming Soon Banner */}
@@ -292,7 +457,7 @@ const ToolsGrid = () => {
           <div className="bg-white/70 backdrop-blur-sm border border-white/60 p-8 rounded-2xl inline-block shadow-sm">
             <h3 className="text-2xl font-bold text-gradient mb-4">更多工具即将推出</h3>
             <p className="text-gray-600 mb-6">
-              我们正在开发更多创新的AI工具，敬请期待！
+              我们正在开发更多创新的AI工具，同时持续收录优质的站外AI工具
             </p>
             <Button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-0 shadow-lg">
               订阅更新通知
