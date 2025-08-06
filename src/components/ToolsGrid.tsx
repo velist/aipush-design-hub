@@ -1,6 +1,10 @@
-import { ExternalLink, ArrowRight, Star, Users, TrendingUp, MessageCircle, Palette, Mic, Video, Briefcase, Code, BarChart3, FileText } from 'lucide-react';
+import { ExternalLink, ArrowRight, Star, Users, TrendingUp, MessageCircle, Palette, Mic, Video, Briefcase, Code, BarChart3, FileText, Heart } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { userAuthService } from '@/services/userAuthService';
+import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from 'react';
 import newsIcon from '@/assets/news-icon-new.png';
 import chatIcon from '@/assets/chat-icon-new.png';
 import imageIcon from '@/assets/image-icon-new.png';
@@ -10,6 +14,115 @@ import analyticsIcon from '@/assets/analytics-icon-new.png';
 
 const ToolsGrid = () => {
   console.log('ToolsGrid component loaded - new version');
+  
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favoriteLoading, setFavoriteLoading] = useState<string[]>([]);
+
+  // 获取用户收藏列表
+  useEffect(() => {
+    if (user) {
+      loadUserFavorites();
+    }
+  }, [user]);
+
+  const loadUserFavorites = async () => {
+    if (!user) return;
+    
+    try {
+      const userFavorites = await userAuthService.getUserFavorites(user.id);
+      setFavorites(userFavorites.map(fav => fav.tool_id));
+    } catch (error) {
+      console.error('加载用户收藏失败:', error);
+    }
+  };
+
+  const handleFavorite = async (tool: any, category?: string) => {
+    if (!user) {
+      toast({
+        title: '请先登录',
+        description: '登录后即可收藏您喜爱的工具',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    const toolId = tool.id.toString();
+    const isFavorited = favorites.includes(toolId);
+    
+    setFavoriteLoading(prev => [...prev, toolId]);
+
+    try {
+      if (isFavorited) {
+        const result = await userAuthService.removeFavorite(user.id, toolId);
+        if (result.success) {
+          setFavorites(prev => prev.filter(id => id !== toolId));
+          toast({
+            title: '取消收藏',
+            description: `已取消收藏 ${tool.name}`
+          });
+        } else {
+          toast({
+            title: '操作失败',
+            description: result.error,
+            variant: 'destructive'
+          });
+        }
+      } else {
+        const result = await userAuthService.addFavorite(user.id, {
+          toolId: toolId,
+          toolName: tool.name,
+          toolUrl: tool.url,
+          toolDescription: tool.description,
+          toolCategory: category || tool.category
+        });
+        if (result.success) {
+          setFavorites(prev => [...prev, toolId]);
+          toast({
+            title: '收藏成功',
+            description: `已收藏 ${tool.name}`
+          });
+        } else {
+          toast({
+            title: '收藏失败',
+            description: result.error,
+            variant: 'destructive'
+          });
+        }
+      }
+
+      // 记录用户活动
+      await userAuthService.recordActivity(user.id, {
+        type: isFavorited ? 'unfavorite' : 'favorite',
+        toolId: toolId,
+        metadata: { toolName: tool.name, category: category || tool.category }
+      });
+    } catch (error) {
+      toast({
+        title: '操作失败',
+        description: '收藏操作时发生错误',
+        variant: 'destructive'
+      });
+    } finally {
+      setFavoriteLoading(prev => prev.filter(id => id !== toolId));
+    }
+  };
+
+  const handleToolClick = async (tool: any, category?: string) => {
+    // 记录访问活动
+    if (user && tool.status === '已上线') {
+      try {
+        await userAuthService.recordActivity(user.id, {
+          type: 'visit',
+          toolId: tool.id.toString(),
+          metadata: { toolName: tool.name, category: category || tool.category }
+        });
+      } catch (error) {
+        console.error('记录访问活动失败:', error);
+      }
+    }
+  };
 
   // 本站工具
   const myTools = [
@@ -296,85 +409,108 @@ const ToolsGrid = () => {
     }
   };
 
-  const ToolCard = ({ tool, index, isExternal = false }: { tool: any, index: number, isExternal?: boolean }) => (
-    <div
-      key={tool.id}
-      className={`group bg-white/80 backdrop-blur-sm border border-white/60 p-6 rounded-2xl hover-lift transition-all duration-500 shadow-sm ${
-        tool.featured ? 'ring-2 ring-blue-200/50' : ''
-      }`}
-      style={{ animationDelay: `${index * 0.1}s` }}
-    >
-      {/* Tool Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className={`p-3 rounded-xl ${isExternal ? 'bg-gradient-to-r from-gray-500 to-gray-600' : `bg-gradient-to-r ${tool.color}`} shimmer-effect`}>
-            <img src={tool.icon} alt={tool.name} className="w-8 h-8" />
+  const ToolCard = ({ tool, index, isExternal = false, category }: { tool: any, index: number, isExternal?: boolean, category?: string }) => {
+    const toolId = tool.id.toString();
+    const isFavorited = favorites.includes(toolId);
+    const isLoadingFavorite = favoriteLoading.includes(toolId);
+
+    return (
+      <div
+        key={tool.id}
+        className={`group bg-white/80 backdrop-blur-sm border border-white/60 p-6 rounded-2xl hover-lift transition-all duration-500 shadow-sm ${
+          tool.featured ? 'ring-2 ring-blue-200/50' : ''
+        }`}
+        style={{ animationDelay: `${index * 0.1}s` }}
+      >
+        {/* Tool Header */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className={`p-3 rounded-xl ${isExternal ? 'bg-gradient-to-r from-gray-500 to-gray-600' : `bg-gradient-to-r ${tool.color}`} shimmer-effect`}>
+              <img src={tool.icon} alt={tool.name} className="w-8 h-8" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                {tool.name}
+              </h3>
+              <div className="flex items-center space-x-2 mt-1">
+                {tool.featured && (
+                  <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                )}
+                {isExternal && (
+                  <Badge variant="secondary" className="text-xs bg-green-50 text-green-700">
+                    外部工具
+                  </Badge>
+                )}
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
-              {tool.name}
-            </h3>
-            <div className="flex items-center space-x-2 mt-1">
-              {tool.featured && (
-                <Star className="h-3 w-3 text-yellow-400 fill-current" />
-              )}
-              {isExternal && (
-                <Badge variant="secondary" className="text-xs bg-green-50 text-green-700">
-                  外部工具
-                </Badge>
-              )}
+          <div className="flex items-center space-x-2">
+            {/* 收藏按钮 */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleFavorite(tool, category)}
+              disabled={isLoadingFavorite}
+              className={`h-8 w-8 p-0 ${
+                isFavorited 
+                  ? 'text-red-500 hover:text-red-600' 
+                  : 'text-gray-400 hover:text-red-500'
+              }`}
+            >
+              <Heart className={`h-4 w-4 ${isFavorited ? 'fill-current' : ''}`} />
+            </Button>
+            <div className={`w-2 h-2 rounded-full ${getStatusColor(tool.status)}`}></div>
+          </div>
+        </div>
+
+        {/* Tool Description */}
+        <p className="text-gray-600 mb-6 leading-relaxed">
+          {tool.description}
+        </p>
+
+        {/* Tool Stats */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <div className="flex items-center space-x-1">
+              <Users className="h-4 w-4" />
+              <span>{tool.users}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <TrendingUp className="h-4 w-4" />
+              <span>{tool.status}</span>
             </div>
           </div>
         </div>
-        <div className={`w-2 h-2 rounded-full ${getStatusColor(tool.status)}`}></div>
-      </div>
 
-      {/* Tool Description */}
-      <p className="text-gray-600 mb-6 leading-relaxed">
-        {tool.description}
-      </p>
-
-      {/* Tool Stats */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-4 text-sm text-gray-500">
-          <div className="flex items-center space-x-1">
-            <Users className="h-4 w-4" />
-            <span>{tool.users}</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <TrendingUp className="h-4 w-4" />
-            <span>{tool.status}</span>
-          </div>
+        {/* Tool Actions */}
+        <div className="flex space-x-2">
+          {tool.status === '已上线' ? (
+            <Button
+              asChild
+              className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white group/btn border-0 shadow-lg"
+              onClick={() => handleToolClick(tool, category)}
+            >
+              <a href={tool.url} target="_blank" rel="noopener noreferrer">
+                立即使用
+                <ExternalLink className="ml-2 h-4 w-4 group-hover/btn:rotate-12 transition-transform" />
+              </a>
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              className="flex-1 bg-white/60 border-gray-200 hover:bg-white/80"
+              disabled
+            >
+              {tool.status === '开发中' ? '敬请期待' : '即将推出'}
+            </Button>
+          )}
+          <Button variant="ghost" size="sm" className="bg-white/40 hover:bg-white/60">
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
-
-      {/* Tool Actions */}
-      <div className="flex space-x-2">
-        {tool.status === '已上线' ? (
-          <Button
-            asChild
-            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white group/btn border-0 shadow-lg"
-          >
-            <a href={tool.url} target="_blank" rel="noopener noreferrer">
-              立即使用
-              <ExternalLink className="ml-2 h-4 w-4 group-hover/btn:rotate-12 transition-transform" />
-            </a>
-          </Button>
-        ) : (
-          <Button
-            variant="outline"
-            className="flex-1 bg-white/60 border-gray-200 hover:bg-white/80"
-            disabled
-          >
-            {tool.status === '开发中' ? '敬请期待' : '即将推出'}
-          </Button>
-        )}
-        <Button variant="ghost" size="sm" className="bg-white/40 hover:bg-white/60">
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section id="tools" className="py-20 relative">
@@ -407,7 +543,7 @@ const ToolsGrid = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {myTools.map((tool, index) => (
-              <ToolCard key={tool.id} tool={tool} index={index} />
+              <ToolCard key={tool.id} tool={tool} index={index} category="本站工具" />
             ))}
           </div>
         </div>
@@ -445,6 +581,7 @@ const ToolsGrid = () => {
                       tool={tool} 
                       index={categoryIndex * 3 + toolIndex} 
                       isExternal={true}
+                      category={category.name}
                     />
                   ))}
                 </div>

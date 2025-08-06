@@ -1,10 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles, User, LogOut, Settings } from 'lucide-react';
 import { Button } from './ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, signOut, loading } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +33,13 @@ const Navigation = () => {
     { name: '功能', href: '#features' },
     { name: '关于', href: '#about' },
   ];
+
+  const handleSignOut = async () => {
+    const result = await signOut();
+    if (result.success) {
+      navigate('/');
+    }
+  };
 
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -48,9 +68,59 @@ const Navigation = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
-            <Button className="bg-white/60 border-white/60 backdrop-blur-sm hover:bg-white/80">
-              开始使用
-            </Button>
+            
+            {/* 用户状态 */}
+            {loading ? (
+              <Button variant="outline" disabled>
+                加载中...
+              </Button>
+            ) : user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={user.user_metadata?.avatar_url} />
+                      <AvatarFallback>
+                        {user.user_metadata?.full_name?.charAt(0) || user.email?.charAt(0)?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end">
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.user_metadata?.full_name || '用户'}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
+                    <User className="mr-2 h-4 w-4" />
+                    个人中心
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/profile?tab=settings')}>
+                    <Settings className="mr-2 h-4 w-4" />
+                    设置
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    退出登录
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button 
+                className="bg-white/60 border-white/60 backdrop-blur-sm hover:bg-white/80"
+                onClick={() => navigate('/auth')}
+              >
+                登录 / 注册
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -81,9 +151,31 @@ const Navigation = () => {
                 </a>
               ))}
               <div className="px-3 py-2">
-                <Button className="w-full bg-white/60 border-white/60 backdrop-blur-sm hover:bg-white/80">
-                  开始使用
-                </Button>
+                {user ? (
+                  <div className="space-y-2">
+                    <Button 
+                      className="w-full" 
+                      variant="outline"
+                      onClick={() => navigate('/profile')}
+                    >
+                      个人中心
+                    </Button>
+                    <Button 
+                      className="w-full" 
+                      variant="ghost"
+                      onClick={handleSignOut}
+                    >
+                      退出登录
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    className="w-full bg-white/60 border-white/60 backdrop-blur-sm hover:bg-white/80"
+                    onClick={() => navigate('/auth')}
+                  >
+                    登录 / 注册
+                  </Button>
+                )}
               </div>
             </div>
           </div>
