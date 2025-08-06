@@ -295,34 +295,15 @@ class UserManagementService {
     return Array.from(departments).sort();
   }
 
-  // 获取用户登录历史（模拟）
+  // 获取用户登录历史（生产环境空实现）
   async getUserLoginHistory(id: string): Promise<Array<{
     timestamp: string;
     ip: string;
     userAgent: string;
     success: boolean;
   }>> {
-    // 模拟登录历史数据
-    return [
-      {
-        timestamp: '2024-01-30T10:15:00Z',
-        ip: '192.168.1.100',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        success: true
-      },
-      {
-        timestamp: '2024-01-29T14:20:00Z',
-        ip: '192.168.1.100',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        success: true
-      },
-      {
-        timestamp: '2024-01-29T09:45:00Z',
-        ip: '192.168.1.100',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        success: false
-      }
-    ];
+    // 生产环境初始为空，等待实际实现
+    return [];
   }
 }
 

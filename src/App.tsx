@@ -15,6 +15,8 @@ import AdminDashboard from "./admin/pages/AdminDashboard";
 import ToolsManagement from "./admin/pages/ToolsManagement";
 import Analytics from "./admin/pages/Analytics";
 import UserManagement from "./admin/pages/UserManagement";
+import ContentManagement from "./admin/pages/ContentManagement";
+import SystemSettings from "./admin/pages/SystemSettings";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +61,16 @@ const App = () => (
             <Route path="users" element={
               <ProtectedRoute requiredPermission="users:read">
                 <UserManagement />
+              </ProtectedRoute>
+            } />
+            <Route path="content" element={
+              <ProtectedRoute requiredPermission="content:read">
+                <ContentManagement />
+              </ProtectedRoute>
+            } />
+            <Route path="settings" element={
+              <ProtectedRoute requiredPermission="settings:read">
+                <SystemSettings />
               </ProtectedRoute>
             } />
             <Route index element={<AdminDashboard />} />

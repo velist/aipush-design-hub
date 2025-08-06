@@ -57,6 +57,7 @@ import {
 } from 'lucide-react';
 import { userManagementService, type AdminUser, type UserFilters, type UserStats, type CreateUserData } from '@/admin/services/userManagementService';
 import { authService } from '@/admin/services/authService';
+import CreateUserDialog from '@/admin/components/CreateUserDialog';
 
 const UserManagement = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -186,6 +187,13 @@ const UserManagement = () => {
         variant: 'destructive'
       });
     }
+  };
+
+  const handleUserCreated = async (newUser: AdminUser) => {
+    setUsers([...users, newUser]);
+    // 重新加载统计数据
+    const newStats = await userManagementService.getUserStats();
+    setStats(newStats);
   };
 
   const getRoleIcon = (role: AdminUser['role']) => {
@@ -500,6 +508,13 @@ const UserManagement = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* 创建用户对话框 */}
+      <CreateUserDialog
+        open={showCreateDialog}
+        onOpenChange={setShowCreateDialog}
+        onUserCreated={handleUserCreated}
+      />
     </div>
   );
 };
