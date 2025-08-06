@@ -14,6 +14,7 @@ import AdminLogin from "./admin/pages/AdminLogin";
 import AdminDashboard from "./admin/pages/AdminDashboard";
 import ToolsManagement from "./admin/pages/ToolsManagement";
 import Analytics from "./admin/pages/Analytics";
+import UserManagement from "./admin/pages/UserManagement";
 
 const queryClient = new QueryClient();
 
@@ -45,8 +46,21 @@ const App = () => (
             </ProtectedRoute>
           }>
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="tools" element={<ToolsManagement />} />
-            <Route path="analytics" element={<Analytics />} />
+            <Route path="tools" element={
+              <ProtectedRoute requiredPermission="tools:read">
+                <ToolsManagement />
+              </ProtectedRoute>
+            } />
+            <Route path="analytics" element={
+              <ProtectedRoute requiredPermission="analytics:read">
+                <Analytics />
+              </ProtectedRoute>
+            } />
+            <Route path="users" element={
+              <ProtectedRoute requiredPermission="users:read">
+                <UserManagement />
+              </ProtectedRoute>
+            } />
             <Route index element={<AdminDashboard />} />
           </Route>
           

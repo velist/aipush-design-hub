@@ -24,53 +24,66 @@ import {
   Bell
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { authService } from '@/admin/services/authService';
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const currentUser = authService.getCurrentUser();
 
   const menuItems = [
     {
       name: '仪表板',
       href: '/admin/dashboard',
       icon: LayoutDashboard,
-      count: null
+      count: null,
+      permission: null
     },
     {
       name: '工具管理',
       href: '/admin/tools',
       icon: Wrench,
-      count: 26
+      count: 26,
+      permission: 'tools:read'
     },
     {
       name: '数据统计',
       href: '/admin/analytics',
       icon: BarChart3,
-      count: null
+      count: null,
+      permission: 'analytics:read'
     },
     {
       name: '内容管理',
       href: '/admin/content',
       icon: FileText,
-      count: null
+      count: null,
+      permission: 'content:read'
     },
     {
       name: '用户管理',
       href: '/admin/users',
       icon: Users,
-      count: 1289
+      count: null,
+      permission: 'users:read'
     },
     {
       name: '系统设置',
       href: '/admin/settings',
       icon: Settings,
-      count: null
+      count: null,
+      permission: 'settings:read'
     }
   ];
 
+  // 根据权限过滤菜单项
+  const filteredMenuItems = menuItems.filter(item => 
+    !item.permission || authService.hasPermission(item.permission)
+  );
+
   const handleLogout = () => {
-    localStorage.removeItem('admin_token');
+    authService.logout();
     navigate('/admin/login');
   };
 
@@ -91,7 +104,7 @@ const AdminLayout = () => {
 
       {/* Navigation */}
       <nav className="flex-1 px-4 py-6 space-y-2">
-        {menuItems.map((item) => {
+        {filteredMenuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.href;
           
@@ -170,7 +183,7 @@ const AdminLayout = () => {
               </Button>
               <div>
                 <h1 className="text-lg font-semibold text-gray-900">
-                  {menuItems.find(item => item.href === location.pathname)?.name || '管理后台'}
+                  {filteredMenuItems.find(item => item.href === location.pathname)?.name || '管理后台'}
                 </h1>
                 <p className="text-sm text-gray-500">
                   {new Date().toLocaleDateString('zh-CN', { 
@@ -196,7 +209,7 @@ const AdminLayout = () => {
                   <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9">
                       <AvatarFallback className="bg-blue-600 text-white">
-                        管
+                        {currentUser?.username?.charAt(0).toUpperCase() || '管'}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -204,17 +217,25 @@ const AdminLayout = () => {
                 <DropdownMenuContent className="w-56" align="end">
                   <DropdownMenuLabel>
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">管理员</p>
+                      <p className="text-sm font-medium leading-none">
+                        {currentUser?.username || '管理员'}
+                      </p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        admin@aipush.fun
+                        {currentUser?.email || 'admin@aipush.fun'}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {currentUser?.role === 'admin' ? '管理员' : 
+                         currentUser?.role === 'editor' ? '编辑员' : '查看员'}
                       </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/admin/settings')}>
-                    <Settings className="mr-2 h-4 w-4" />
-                    系统设置
-                  </DropdownMenuItem>
+                  {authService.hasPermission('settings:read') && (
+                    <DropdownMenuItem onClick={() => navigate('/admin/settings')}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      系统设置
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={() => navigate('/')}>
                     <Home className="mr-2 h-4 w-4" />
                     返回前台
