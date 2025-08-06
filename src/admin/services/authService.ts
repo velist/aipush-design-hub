@@ -27,7 +27,7 @@ class AuthService {
   private readonly SECRET_KEY = 'aipush_admin_secret_2024';
   private readonly TOKEN_EXPIRY = 24 * 60 * 60 * 1000; // 24小时
 
-  // 默认管理员账户（生产环境应该从数据库获取）
+  // 生产环境默认管理员账户（仅保留系统管理员）
   private readonly defaultUsers: User[] = [
     {
       id: '1',
@@ -36,21 +36,12 @@ class AuthService {
       role: 'admin',
       permissions: ['all'],
       isActive: true,
-    },
-    {
-      id: '2', 
-      username: 'editor',
-      email: 'editor@aipush.fun',
-      role: 'editor',
-      permissions: ['tools:read', 'tools:write', 'analytics:read'],
-      isActive: true,
     }
   ];
 
-  // 密码哈希（生产环境应该使用更强的哈希算法）
+  // 生产环境密码哈希（管理员需要设置强密码）
   private readonly passwordHashes: Record<string, string> = {
-    'admin': this.hashPassword('AiPush@2024!'),
-    'editor': this.hashPassword('Editor@2024!')
+    'admin': this.hashPassword('AiPush@2024!')
   };
 
   private hashPassword(password: string): string {

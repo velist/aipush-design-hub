@@ -140,13 +140,6 @@ const AdminLogin = () => {
           </form>
           
           <div className="mt-6 space-y-3">
-            <div className="border-t pt-4">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">测试账户：</h4>
-              <div className="space-y-1 text-xs text-gray-600">
-                <p><span className="font-medium">管理员：</span>admin / AiPush@2024!</p>
-                <p><span className="font-medium">编辑员：</span>editor / Editor@2024!</p>
-              </div>
-            </div>
             <div className="text-center">
               <p className="text-xs text-gray-500">
                 © 2024 AI Push. 系统采用加密认证技术保护您的数据安全

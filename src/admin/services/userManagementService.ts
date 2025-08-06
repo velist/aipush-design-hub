@@ -45,7 +45,7 @@ class UserManagementService {
   private readonly STORAGE_KEY = 'aipush_admin_users';
   private readonly API_BASE_URL = 'https://api.aipush.fun';
 
-  // 默认用户数据（生产环境应该从数据库获取）
+  // 生产环境初始用户（仅保留系统管理员）
   private defaultUsers: AdminUser[] = [
     {
       id: '1',
@@ -54,57 +54,11 @@ class UserManagementService {
       role: 'admin',
       permissions: ['all'],
       isActive: true,
-      createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-30T10:15:00Z',
-      lastLogin: '2024-01-30T10:15:00Z',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       fullName: '系统管理员',
       department: '技术部',
-      phone: '+86 138-0000-0000',
       avatar: '👨‍💼'
-    },
-    {
-      id: '2',
-      username: 'editor',
-      email: 'editor@aipush.fun',
-      role: 'editor',
-      permissions: ['tools:read', 'tools:write', 'analytics:read', 'content:write'],
-      isActive: true,
-      createdAt: '2024-01-05T00:00:00Z',
-      updatedAt: '2024-01-29T14:20:00Z',
-      lastLogin: '2024-01-29T14:20:00Z',
-      fullName: '内容编辑',
-      department: '运营部',
-      phone: '+86 139-0000-0000',
-      avatar: '✏️'
-    },
-    {
-      id: '3',
-      username: 'viewer',
-      email: 'viewer@aipush.fun',
-      role: 'viewer',
-      permissions: ['tools:read', 'analytics:read'],
-      isActive: true,
-      createdAt: '2024-01-10T00:00:00Z',
-      updatedAt: '2024-01-28T09:30:00Z',
-      lastLogin: '2024-01-28T09:30:00Z',
-      fullName: '数据分析员',
-      department: '产品部',
-      phone: '+86 137-0000-0000',
-      avatar: '📊'
-    },
-    {
-      id: '4',
-      username: 'inactive_user',
-      email: 'inactive@aipush.fun',
-      role: 'editor',
-      permissions: ['tools:read', 'content:write'],
-      isActive: false,
-      createdAt: '2024-01-15T00:00:00Z',
-      updatedAt: '2024-01-25T16:45:00Z',
-      lastLogin: '2024-01-20T12:00:00Z',
-      fullName: '已停用用户',
-      department: '市场部',
-      phone: '+86 136-0000-0000'
     }
   ];
 

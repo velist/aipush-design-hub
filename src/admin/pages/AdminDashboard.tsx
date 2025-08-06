@@ -12,36 +12,28 @@ import {
 } from 'lucide-react';
 
 const AdminDashboard = () => {
-  // 模拟数据
+  // 生产环境初始数据（空状态）
   const stats = {
-    totalTools: 26,
-    myTools: 6,
-    externalTools: 20,
-    totalVisits: 12543,
-    todayVisits: 234,
-    activeUsers: 1289
+    totalTools: 0,
+    myTools: 0,
+    externalTools: 0,
+    totalVisits: 0,
+    todayVisits: 0,
+    activeUsers: 0
   };
 
   const recentActivities = [
-    { id: 1, action: '新增工具', target: 'AI新闻推送', time: '2小时前', type: 'create' },
-    { id: 2, action: '更新状态', target: 'AI智能对话', time: '4小时前', type: 'update' },
-    { id: 3, action: '用户访问', target: '首页', time: '5分钟前', type: 'visit' },
-    { id: 4, action: '工具点击', target: 'ChatGPT', time: '10分钟前', type: 'click' },
+    { id: 1, action: '系统启动', target: '管理后台', time: '刚刚', type: 'system' }
   ];
 
-  const topTools = [
-    { name: 'AI新闻推送', visits: 2341, trend: '+12%' },
-    { name: 'ChatGPT', visits: 1834, trend: '+8%' },
-    { name: 'Midjourney', visits: 1456, trend: '+15%' },
-    { name: 'GitHub Copilot', visits: 987, trend: '+5%' },
-  ];
+  const topTools = [];
 
   return (
     <div className="p-6 space-y-6">
       {/* 页面标题 */}
       <div>
         <h1 className="text-3xl font-bold text-gray-900">仪表板</h1>
-        <p className="text-gray-600 mt-2">欢迎回到 AI Push 管理后台</p>
+        <p className="text-gray-600 mt-2">欢迎使用 AI Push 管理后台</p>
       </div>
 
       {/* 统计卡片 */}
@@ -143,23 +135,31 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {topTools.map((tool, index) => (
-                <div key={tool.name} className="flex items-center space-x-4">
-                  <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full text-blue-600 font-bold text-sm">
-                    {index + 1}
+              {topTools.length > 0 ? (
+                topTools.map((tool, index) => (
+                  <div key={tool.name} className="flex items-center space-x-4">
+                    <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full text-blue-600 font-bold text-sm">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900">{tool.name}</p>
+                      <p className="text-sm text-gray-500 flex items-center">
+                        <MousePointer className="h-3 w-3 mr-1" />
+                        {tool.visits.toLocaleString()} 次访问
+                      </p>
+                    </div>
+                    <Badge variant="outline" className="text-green-600 border-green-200">
+                      {tool.trend}
+                    </Badge>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900">{tool.name}</p>
-                    <p className="text-sm text-gray-500 flex items-center">
-                      <MousePointer className="h-3 w-3 mr-1" />
-                      {tool.visits.toLocaleString()} 次访问
-                    </p>
-                  </div>
-                  <Badge variant="outline" className="text-green-600 border-green-200">
-                    {tool.trend}
-                  </Badge>
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <Wrench className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                  <p className="text-sm">暂无工具数据</p>
+                  <p className="text-xs">添加工具后这里会显示访问统计</p>
                 </div>
-              ))}
+              )}
             </div>
           </CardContent>
         </Card>

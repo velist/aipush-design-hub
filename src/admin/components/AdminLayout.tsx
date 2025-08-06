@@ -44,7 +44,7 @@ const AdminLayout = () => {
       name: '工具管理',
       href: '/admin/tools',
       icon: Wrench,
-      count: 26,
+      count: null,
       permission: 'tools:read'
     },
     {
